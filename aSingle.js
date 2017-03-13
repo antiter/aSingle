@@ -1,7 +1,7 @@
 /**
- * 单页面框架，只需要requie("aSingle").init()即可
+ * 单页面框架，只需要requie("aSingle")即可
  * @version 2017/3/6
- * @author luowenlin1
+ * @author antit
  */
 define('aSingle', function (require, exports, module) {
     "use strict";
