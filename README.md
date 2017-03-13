@@ -4,7 +4,8 @@
 #设置window.aSingle_disable = true，即可关闭单页面，使用多页面跳转。
 
 #缺省属性是data-asingle=1
-```<a href="/test/test.html" data-asingle=1>点击跳转</a>
+```
+<a href="/test/test.html" data-asingle=1>点击跳转</a>
 <a href="/test/test.html" data-asingle=2>当前页面replace替换</a>
 ```
 #需要引入ajax，或者直接用zepto
