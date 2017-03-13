@@ -1,5 +1,5 @@
 /**
- * 单页面框架，只需要requie("aSingle")即可
+ * 单页面框架，只需要requie("aSingle").init()即可
  * @version 2017/3/6
  * @author luowenlin1
  */
@@ -13,7 +13,7 @@ define('aSingle', function (require, exports, module) {
     //    return;
         if(window.aSingle&&window.aSingle.jump||window.aSingle_disable) return;
         window.aSingle = _aSingle;
-
+        window.aSingle_maxPage =window.aSingle_maxPage||5;
     //}
     _aSingle.jump = function(url,action){
         if(!url) return;
@@ -100,7 +100,7 @@ define('aSingle', function (require, exports, module) {
         this.mergeHead();
         this.replaceBody();
         var self = this;
-        (window.requestAnimationFrame|| window.webkitRequestAnimationFrame)(function(){
+        requestAnimationFrame(function(){
             try{
                 document.body = self.newHtml.body;
             }catch(e){console.log(e)}
@@ -108,13 +108,29 @@ define('aSingle', function (require, exports, module) {
             //self.removeCurHead();
             if(_aSingle.y) window.scroll(0,_aSingle.y);
         });
-
+    }
+    function requestAnimationFrame(fn) {
+        var raf = window.requestAnimationFrame|| window.webkitRequestAnimationFrame;
+        if(raf){
+            raf(fn);
+        }else{
+            setTimeout(fn, 0)
+        }
     }
     handleContent.prototype.cacheCur = function(){
         var u=_aSingle.locUrl.curUrl;
         if(_aSingle.cache[u]) return;
         aLog("cached "+u);
         _aSingle.cache[_aSingle.locUrl.curUrl] = {d:{head:this.currentHtml.head.cloneNode(1),body:this.currentHtml.body.cloneNode(1)},t:Date.now()};
+        requestAnimationFrame(function(){
+            if(Object.keys(_aSingle.cache).length<window.aSingle_maxPage) return;
+            var key,i,m=Date.now(),mi;
+            for(key in _aSingle.cache){
+                i = _aSingle.cache[key];
+                if(i.t<m) m = i.t,mi=key;
+            }
+            mi&&delete _aSingle.cache[mi];
+        });
     }
     handleContent.prototype.replaceBody = function(){
         aLog("replaceBody start");
