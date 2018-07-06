@@ -1,20 +1,20 @@
 /**
- * 单页面框架，只需要requie("aSingle")即可
  * @version 2017/3/6
  * @author antit
  */
-define('aSingle', function (require, exports, module) {
-    "use strict";
-    var _cacheThisModule_;
-    var ajax = require("ajax");
+(function(global, factory) {
+  if (typeof define === 'function')
+    define(function() { return factory(global) })
+  else
+    factory(global)
+}(this, function(window) {
     var _aSingle={};
     var debug = window.aSingle_debug||true;
-    //exports.init = function(){
-    //    return;
-        if(window.aSingle&&window.aSingle.jump||window.aSingle_disable) return;
-        window.aSingle = _aSingle;
-        window.aSingle_maxPage =window.aSingle_maxPage||5;
-    //}
+    var xhr = new XMLHttpRequest();
+    if(window.aSingle&&window.aSingle.jump||window.aSingle_disable) return;
+    window.aSingle = _aSingle;
+    window.aSingle_maxPage =window.aSingle_maxPage||5;
+    
     _aSingle.jump = function(url,action){
         if(!url) return;
         if(window.aSingle_disable){
@@ -64,19 +64,15 @@ define('aSingle', function (require, exports, module) {
             cb(t.d);
             return;
         }
-        var param={};
-        param.url = url;
-        param.dataType="html";
-        aLog("start http "+url);
-        param.success = function(datas){
-            if(!datas) return;
-            aLog("http success "+url);
-            cb(datas);
+        xhr.open("GET",url,true);
+        xhr.responseType = "document";
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                aLog("http success "+url);
+                cb(xhr.responseText);
+            }
         };
-        param.error = function(ret){
-            aLog("http error "+ret+""+url);
-        };
-        ajax.load(param);
+        xhr.send(param);
     }
     function aLog(){
         if(debug) console.log.apply(console,arguments);
@@ -255,4 +251,4 @@ define('aSingle', function (require, exports, module) {
         }
     }
     new bindEvent();
-});
+}));
