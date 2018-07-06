@@ -7,8 +7,6 @@
 <a href="/test/test.html" data-asingle=1>点击跳转</a>
 <a href="/test/test.html" data-asingle=2>当前页面replace替换</a>
 ```
-###需要引入ajax，或者直接用zepto
-https://github.com/mountainlife/ajax
 
 页面切换，保存了原来的样式文件，并未移除，否则在切入的时候会有样式错乱的闪烁感。
 
